@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invitación</title>
+
+  <style>
+    :root {
+      --text-main: #1f1f1f;
+      --text-soft: #555;
+      --button-dark: #111;
+      --button-light: #f4f4f4;
+      --border-soft: #dddddd;
+      --heart-red: #e11d48;
+      --vomit-green: #9acd32;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      background: #ffffff;
+      color: var(--text-main);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    main {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px 80px;
+      position: relative;
+    }
+
+    .screen {
+      display: none;
+      width: 100%;
+      max-width: 760px;
+      text-align: center;
+      animation: fadeIn 0.45s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    h1,
+    h2,
+    p {
+      margin-top: 0;
+    }
+
+    .title {
+      font-size: clamp(2rem, 7vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      letter-spacing: -0.04em;
+    }
+
+    .title-medium {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.035em;
+    }
+
+    .text {
+      font-size: clamp(1.2rem, 3.5vw, 1.85rem);
+      line-height: 1.45;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .small-text {
+      font-size: clamp(0.95rem, 2.6vw, 1.2rem);
+      color: var(--text-soft);
+      line-height: 1.5;
+      margin-bottom: 28px;
+      letter-spacing: -0.01em;
+    }
+
+    .big-question {
+      font-size: clamp(2.8rem, 9vw, 5.5rem);
+      font-weight: 700;
+      margin: 32px 0 24px;
+      letter-spacing: -0.055em;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+      min-height: 56px;
+      position: relative;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 999px;
+      padding: 14px 28px;
+      transition:
+        transform 0.2s ease,
+        opacity 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+      font-weight: 600;
+      font-family: inherit;
+      letter-spacing: -0.01em;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .yes-btn,
+    .next-btn {
+      background: var(--button-dark);
+      color: #ffffff;
+    }
+
+    .yes-btn:hover,
+    .next-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .no-btn {
+      background: var(--button-light);
+      color: #111;
+      border: 1px solid var(--border-soft);
+    }
+
+    .extra-btn {
+      background: #ffffff;
+      color: #111;
+      border: 1px solid #111;
+    }
+
+    .image-placeholder {
+      width: 100%;
+      min-height: 220px;
+      border: 1.5px dashed #cfcfcf;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #777;
+      font-size: 1rem;
+      margin: 26px auto;
+      padding: 24px;
+      background: #fafafa;
+    }
+
+    .invitation-image {
+      width: 100%;
+      max-width: 420px;
+      max-height: 460px;
+      object-fit: cover;
+      border-radius: 24px;
+      margin: 26px auto;
+      display: block;
+    }
+
+    .patria-image {
+      width: 100%;
+      max-width: 860px;
+      max-height: 460px;
+      object-fit: cover;
+      border-radius: 24px;
+      margin: 26px auto;
+      display: block;
+    }
+
+    .image-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 26px 0;
+    }
+
+    .weather-image {
+      width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+      border-radius: 18px;
+      border: 1px solid #e5e5e5;
+      background: #f7f7f7;
+      display: block;
+    }
+
+    .patria-title {
+      font-size: clamp(2.4rem, 8vw, 5rem);
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 28px;
+      letter-spacing: -0.055em;
+    }
+
+    .patria-title span:nth-child(1) {
+      color: #fcd116;
+    }
+
+    .patria-title span:nth-child(2) {
+      color: #003893;
+    }
+
+    .patria-title span:nth-child(3) {
+      color: #ce1126;
+    }
+
+    .tiny-bottom-text {
+      position: fixed;
+      bottom: 34px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      color: #555;
+      width: 100%;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .date-card {
+      display: inline-block;
+      text-align: left;
+      border: 1px solid #e5e5e5;
+      border-radius: 24px;
+      padding: 28px;
+      background: #fafafa;
+      font-size: clamp(1.05rem, 3vw, 1.4rem);
+      line-height: 1.8;
+      margin-top: 20px;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.78rem;
+      color: #666;
+      z-index: 20;
+      text-align: center;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    footer .heart {
+      color: var(--heart-red);
+      font-size: 1rem;
+      vertical-align: -1px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.32);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 26px;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.18);
+      animation: popIn 0.22s ease;
+    }
+
+    .modal-message {
+      white-space: pre-line;
+      font-size: 1.15rem;
+      line-height: 1.5;
+      margin-bottom: 22px;
+      letter-spacing: -0.01em;
+    }
+
+    .modal button {
+      background: #111;
+      color: #fff;
+      padding: 12px 22px;
+    }
+
+    .hide {
+      display: none !important;
+    }
+
+    .shake {
+      animation: shake 0.35s ease;
+    }
+
+    .spin {
+      animation: spin 0.45s ease;
+    }
+
+    .vanish {
+      opacity: 0;
+      transform: scale(0.2);
+      pointer-events: none;
+    }
+
+    .vomit {
+      background: var(--vomit-green) !important;
+      border-color: #7da928 !important;
+      font-size: 1.25rem;
+      cursor: default;
+    }
+
+    .graphic-only {
+      pointer-events: none;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes shake {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-7px);
+      }
+
+      50% {
+        transform: translateX(7px);
+      }
+
+      75% {
+        transform: translateX(-5px);
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg) scale(1);
+      }
+
+      to {
+        transform: rotate(12deg) scale(0.95);
+      }
+    }
+
+    @media (max-width: 640px) {
+      main {
+        padding: 40px 16px 90px;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+        max-width: 260px;
+      }
+
+      .image-row {
+        grid-template-columns: 1fr;
+      }
+
+      .patria-image {
+        max-height: 340px;
+      }
+
+      .date-card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <!-- Pantalla 1 -->
+    <section class="screen active" data-screen="1">
+      <p class="text">
+        hola mujer, yo te dije que la invitacion te iba a llegar a whatsapp y yo soy un hombre de palabra que cumple todo lo que dice...
+      </p>
+
+      <p class="small-text">
+        lo que vas a ver son par cositas a las que puedes decir si o no
+      </p>
+
+      <div class="buttons">
+        <button class="yes-btn" onclick="nextScreen()">Sí</button>
+        <button class="no-btn" onclick="showModal('espera no, date una oportunidad de salir conmigo 😉')">No</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 2 -->
+    <section class="screen" data-screen="2">
+      <p class="text">
+        bueno, yo te había dicho que te robaba de la casa un ratico a comer y tomar unos coctelitos, y así va a ser
+      </p>
+
+      <p class="small-text">
+        Has ido a shamua?
+      </p>
+
+      <div class="buttons">
+        <button class="yes-btn" onclick="nextScreen()">Sí</button>
+        <button class="no-btn" onclick="showModal('bueno, pues te voy a llevar a conocer 🦁')">No</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 3 -->
+    <section class="screen" data-screen="3">
+      <p class="text">
+        estas totalmente invitada por mi persona a pasar la mejor salida que has tenido en tu vida
+      </p>
+
+      <p class="small-text">
+        la idea es tipo 7pm recojo a una preciosa en mi preciosa
+      </p>
+
+      <img
+        class="invitation-image"
+        src="https://i.pinimg.com/736x/c6/fa/0a/c6fa0ac97ca67faff319739cca2ada19.jpg"
+        alt="Imagen de la invitación"
+      />
+
+      <p class="small-text">
+        y vamos directamente a Shamua
+      </p>
+
+      <p class="small-text">
+        pedimos algo de comida algo de tomar, los cocteles, así plan super parchado y hablamos un ratico de la vida
+      </p>
+
+      <div class="big-question">¿VA?</div>
+
+      <div class="buttons">
+        <button class="yes-btn" onclick="nextScreen()">Sí</button>
+        <button class="no-btn funny-no" type="button">No</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 4 -->
+    <section class="screen" data-screen="4">
+      <h1 class="title-medium">PERO ESO NO ES TODO</h1>
+
+      <p class="small-text">
+        también tenemos una clase intensiva de moto en la que yo soy tu profesor 😈
+      </p>
+
+      <p class="small-text">
+        yo soy buen profesor, te lo juro, dame la oportunidad de ser tu teacher super increible
+      </p>
+
+      <img
+        class="invitation-image"
+        src="https://i.pinimg.com/1200x/45/ab/4b/45ab4b5810de10949503280e5cd9421d.jpg"
+        alt="Imagen clase de moto"
+      />
+
+      <p class="text">
+        ¿aceptas?
+      </p>
+
+      <div class="buttons">
+        <button class="yes-btn" onclick="nextScreen()">Sí</button>
+        <button id="noScreen4" class="no-btn" onclick="handleNoScreen4()">No</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 5 -->
+    <section class="screen" data-screen="5">
+      <p class="text">
+        si llegamos hasta acá vamos bien
+      </p>
+
+      <p class="small-text">
+        en esta solo di que si y ya
+      </p>
+
+      <div class="buttons">
+        <button class="yes-btn" onclick="nextScreen()">Sí</button>
+        <button id="noScreen5" class="no-btn" onclick="handleNoScreen5()">No</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 6 -->
+    <section class="screen" data-screen="6">
+      <h1 class="patria-title">
+        <span>FIRME</span>
+        <span>POR LA</span>
+        <span>PATRIA</span>
+      </h1>
+
+      <img
+        class="patria-image"
+        src="https://cloudfront-us-east-1.images.arcpublishing.com/infobae/53A56XPPB5G7LCXNHZTJITN42Y.jpg"
+        alt="Imagen firme por la patria"
+      />
+
+      <p class="small-text">
+        solo abelardo, cierto?
+      </p>
+
+      <div class="buttons">
+        <button class="yes-btn" onclick="nextScreen()">Sí</button>
+        <button id="noScreen6" class="no-btn" onclick="handleNoScreen6()">No</button>
+        <button id="extraScreen6" class="extra-btn" onclick="handleExtraScreen6()">Mensaje Extra</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 7 -->
+    <section class="screen" data-screen="7">
+      <p class="text">
+        que pena quitarle tiempo de su ocupada agenda,doctora
+      </p>
+
+      <p class="small-text">
+        vamos con toda la actitud, cierto?
+      </p>
+
+      <div class="buttons">
+        <button class="yes-btn" onclick="nextScreen()">Sí</button>
+        <button class="no-btn funny-no" type="button">No</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 8 -->
+    <section class="screen" data-screen="8">
+      <h1 class="title">por ultimo</h1>
+
+      <p class="small-text">
+        1. tranquila que la probabilidad de lluvia es muy bajita
+      </p>
+
+      <div class="image-row">
+        <img
+          class="weather-image"
+          src="clima-1.png"
+          alt="Pronóstico de lluvia"
+        />
+
+        <img
+          class="weather-image"
+          src="clima-2.png"
+          alt="Pronóstico del clima a las 7 pm"
+        />
+      </div>
+
+      <p class="small-text">
+        sé que andas demasiado ocupada o no me quieres hablar, y está bien, nada que hacer, solo por whats envíame la direccion donde vives y ya 🙏🏿
+      </p>
+
+      <div class="tiny-bottom-text">
+        el que persevera alcanza...
+      </div>
+
+      <div class="buttons">
+        <button class="next-btn" onclick="nextScreen()">Siguiente</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 9 -->
+    <section class="screen" data-screen="9">
+      <p class="text">
+        gracias por tomarte el tiempo de leer todo
+      </p>
+
+      <p class="small-text">
+        no te arrepentirás
+      </p>
+
+      <div class="buttons">
+        <button class="next-btn" onclick="nextScreen()">Ver datos de la cita</button>
+      </div>
+    </section>
+
+    <!-- Pantalla 10 -->
+    <section class="screen" data-screen="10">
+      <h1 class="title-medium">Datos de la cita</h1>
+
+      <div class="date-card">
+        <div><strong>Lugar de inicio:</strong> tu casa</div>
+        <div><strong>Lugar del desarrollo:</strong> Shamua</div>
+        <div><strong>Lugar de fin:</strong> tu casa</div>
+        <div><strong>Hora inicio:</strong> 7PM</div>
+        <div><strong>Hora fin:</strong> ¿hay fin 😵‍💫?</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Creado por Nicolás Orjuela para ti<span class="heart">❤️</span>
+  </footer>
+
+  <!-- Modal general -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal">
+      <div id="modalMessage" class="modal-message"></div>
+      <button onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+
+  <script>
+    let currentScreen = 1;
+    const totalScreens = 10;
+
+    let afterModalClose = null;
+    let noScreen5Counter = 0;
+    let noScreen6Changed = false;
+
+    function nextScreen() {
+      if (currentScreen >= totalScreens) return;
+
+      const current = document.querySelector(`[data-screen="${currentScreen}"]`);
+      const next = document.querySelector(`[data-screen="${currentScreen + 1}"]`);
+
+      current.classList.remove("active");
+      next.classList.add("active");
+
+      currentScreen++;
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function showModal(message, callback = null) {
+      const overlay = document.getElementById("modalOverlay");
+      const modalMessage = document.getElementById("modalMessage");
+
+      modalMessage.textContent = message;
+      afterModalClose = callback;
+
+      overlay.classList.add("active");
+    }
+
+    function closeModal() {
+      const overlay = document.getElementById("modalOverlay");
+      overlay.classList.remove("active");
+
+      if (typeof afterModalClose === "function") {
+        const callback = afterModalClose;
+        afterModalClose = null;
+        callback();
+      } else {
+        afterModalClose = null;
+      }
+    }
+
+    function handleNoScreen4() {
+      showModal(
+        "buena eleccion mija, nos íbamos a matar\n\nno mentiras... yo confío en ti, tú también confía en mi",
+        function () {
+          document.getElementById("noScreen4").classList.add("hide");
+        }
+      );
+    }
+
+    function handleNoScreen5() {
+      const noButton = document.getElementById("noScreen5");
+
+      noScreen5Counter++;
+
+      if (noScreen5Counter === 1) {
+        showModal("dele que si y ya");
+        return;
+      }
+
+      if (noScreen5Counter === 2) {
+        showModal("fastidiosa, una mas y lo desaparezco");
+        return;
+      }
+
+      showModal("se lo dije", function () {
+        noButton.classList.add("hide");
+      });
+    }
+
+    function handleNoScreen6() {
+      const noButton = document.getElementById("noScreen6");
+
+      if (noScreen6Changed) {
+        return;
+      }
+
+      showModal("por favor cierra esto, se cancela todo", function () {
+        noButton.textContent = "🤮";
+        noButton.classList.add("vomit");
+        noButton.classList.add("graphic-only");
+        noScreen6Changed = true;
+      });
+    }
+
+    function handleExtraScreen6() {
+      showModal(
+        "por cierto, gracias por perderme a Abelardo\n\nyo sé, fastidioso asf, pero era nuevo\n\n😞",
+        function () {
+          document.getElementById("extraScreen6").classList.add("hide");
+        }
+      );
+    }
+
+    function randomBetween(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function moveFunnyButton(button) {
+      const maxX = Math.min(window.innerWidth * 0.28, 160);
+      const maxY = 90;
+
+      const x = randomBetween(-maxX, maxX);
+      const y = randomBetween(-maxY, maxY);
+
+      button.style.transform = `translate(${x}px, ${y}px) rotate(${randomBetween(-12, 12)}deg)`;
+    }
+
+    function applyFunnyEffect(button) {
+      const effects = ["move", "vanish", "shake", "spin"];
+      const effect = effects[Math.floor(Math.random() * effects.length)];
+
+      button.classList.remove("shake", "spin", "vanish");
+
+      if (effect === "move") {
+        moveFunnyButton(button);
+      }
+
+      if (effect === "vanish") {
+        button.classList.add("vanish");
+
+        setTimeout(function () {
+          button.classList.remove("vanish");
+          moveFunnyButton(button);
+        }, 850);
+      }
+
+      if (effect === "shake") {
+        button.classList.add("shake");
+
+        setTimeout(function () {
+          button.classList.remove("shake");
+          moveFunnyButton(button);
+        }, 380);
+      }
+
+      if (effect === "spin") {
+        button.classList.add("spin");
+
+        setTimeout(function () {
+          button.classList.remove("spin");
+          moveFunnyButton(button);
+        }, 450);
+      }
+    }
+
+    function setupFunnyButtons() {
+      const funnyButtons = document.querySelectorAll(".funny-no");
+
+      funnyButtons.forEach(function (button) {
+        button.addEventListener("mouseenter", function () {
+          applyFunnyEffect(button);
+        });
+
+        button.addEventListener("mouseover", function () {
+          applyFunnyEffect(button);
+        });
+
+        button.addEventListener("touchstart", function (event) {
+          event.preventDefault();
+          applyFunnyEffect(button);
+        });
+
+        button.addEventListener("click", function (event) {
+          event.preventDefault();
+          applyFunnyEffect(button);
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", setupFunnyButtons);
+  </script>
+</body>
+</html>
